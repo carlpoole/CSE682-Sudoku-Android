@@ -1,6 +1,9 @@
 package codes.carl.sudoku;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
+import android.content.Context;
+import android.provider.Settings;
 
 /**
  * Sudoku Application Singleton Class
@@ -33,8 +36,18 @@ public class SudokuApplication extends Application {
         return instance;
     }
 
-    private SudokuApplication() {
+    /**
+     * Gets a unique identity for the device running the application.
+     *
+     * @param context
+     * @return
+     */
+    public String getIdentity(Context context){
 
+        @SuppressLint("HardwareIds")
+        String androidId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        return androidId;
     }
 
 

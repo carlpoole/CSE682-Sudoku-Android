@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class PuzzleLIst extends AppCompatActivity {
+public class PuzzleList extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class PuzzleLIst extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, SudokuApplication.getInstance().getIdentity(PuzzleList.this), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
