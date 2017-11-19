@@ -1,12 +1,13 @@
 package codes.carl.sudoku.Network;
 
 /**
- * Created by cma on 11/19/17.
+ * Network client class
+ * <p>
+ * This class manages network connection logic with the Sudoku web service.
+ *
+ * @author Carl Poole
  */
-
 public class Client {
-
-
 
 
 }

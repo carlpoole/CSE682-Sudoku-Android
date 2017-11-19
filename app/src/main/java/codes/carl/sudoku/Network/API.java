@@ -1,11 +1,14 @@
 package codes.carl.sudoku.Network;
 
 /**
- * Created by cma on 11/19/17.
+ * Network Interface.
+ * <p>
+ * This interface models the API connections the Client class makes.
+ *
+ * @author Carl Poole
+ * @see Client
  */
-
 public interface API {
-
 
 
 }
