@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 
 /**
  * Sudoku Application Singleton Class
@@ -42,12 +43,20 @@ public class SudokuApplication extends Application {
      * @param context
      * @return
      */
-    public String getIdentity(Context context){
+    public String getIdentity(Context context) {
 
         @SuppressLint("HardwareIds")
         String androidId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
 
         return androidId;
+    }
+
+
+    public void displayAboutDialog(Context context) {
+        new AlertDialog.Builder(context)
+                .setTitle("About")
+                .setMessage("UID: " + getIdentity(context))
+                .show();
     }
 
 
