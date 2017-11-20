@@ -1,5 +1,6 @@
 package codes.carl.sudoku;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,8 +23,12 @@ public class PuzzleList extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, SudokuApplication.getInstance().getIdentity(PuzzleList.this), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, SudokuApplication.getInstance().getIdentity(PuzzleList.this), Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+
+                Intent newPuzzleIntent = new Intent(PuzzleList.this, NewPuzzle.class);
+                startActivity(newPuzzleIntent);
+
             }
         });
     }
