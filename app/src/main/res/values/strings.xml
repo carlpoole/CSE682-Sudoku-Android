@@ -1,5 +1,21 @@
 <resources>
     <string name="app_name">Sudoku</string>
     <string name="action_about">About</string>
+    <string name="intro_message">
+        <![CDATA[
+
+
+            This sample demonstrates the basic use of Camera2 API. Check the source code to see how
+            you can display camera preview and take pictures.
+
+
+        ]]>
+    </string>
+
     <string name="title_activity_new_puzzle">New Puzzle</string>
+
+    <string name="picture">Picture</string>
+    <string name="description_info">Info</string>
+    <string name="request_permission">Please provide the camera permission to capture puzzle pictures.</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
 </resources>
