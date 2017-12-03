@@ -7,9 +7,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -40,6 +47,7 @@ import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.Surface;
+import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,8 +133,9 @@ public class NewPuzzle extends AppCompatActivity implements View.OnClickListener
         findViewById(R.id.picture).setOnClickListener(this);
         findViewById(R.id.info).setOnClickListener(this);
         mTextureView = findViewById(R.id.texture);
-    }
 
+        overlayGuide();
+    }
 
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a
@@ -312,7 +321,7 @@ public class NewPuzzle extends AppCompatActivity implements View.OnClickListener
                 }
                 case STATE_WAITING_PRECAPTURE: {
                     // CONTROL_AE_STATE can be null on some devices
-                     Integer aeState = result.get(CaptureResult.CONTROL_AE_STATE);
+                    Integer aeState = result.get(CaptureResult.CONTROL_AE_STATE);
                     if (aeState == null ||
                             aeState == CaptureResult.CONTROL_AE_STATE_PRECAPTURE ||
                             aeState == CaptureRequest.CONTROL_AE_STATE_FLASH_REQUIRED) {
@@ -871,6 +880,41 @@ public class NewPuzzle extends AppCompatActivity implements View.OnClickListener
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public void overlayGuide() {
+
+        int outerFillColor = 0xDD000000;
+
+        RectF square = new RectF(0, 0, 300,300);
+
+        // first create an off-screen bitmap and its canvas
+        Bitmap bitmap = Bitmap.createBitmap(mTextureView.getMeasuredWidth(), mTextureView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas();
+        Canvas auxCanvas = new Canvas(bitmap);
+
+        // then fill the bitmap with the desired outside color
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(outerFillColor);
+        paint.setStyle(Paint.Style.FILL);
+        auxCanvas.drawPaint(paint);
+
+        // then punch a transparent hole in the shape of the rect
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        auxCanvas.drawRoundRect(square, 1.0F, 1.0F, paint);
+
+        // then draw the white rect border (being sure to get rid of the xfer mode!)
+        paint.setXfermode(null);
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.STROKE);
+        auxCanvas.drawRoundRect(square, 1.0F, 1.0F, paint);
+
+        // finally, draw the whole thing to the original canvas
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+
+        SurfaceView surfaceView = findViewById(R.id.myRectangleView);
+        surfaceView.draw(auxCanvas);
+
     }
 
     @Override

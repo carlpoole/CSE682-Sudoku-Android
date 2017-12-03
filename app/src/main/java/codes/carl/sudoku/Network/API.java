@@ -1,5 +1,9 @@
 package codes.carl.sudoku.Network;
 
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
+
 import java.util.List;
 
 import codes.carl.sudoku.Model.Puzzle;
@@ -17,8 +21,11 @@ import retrofit2.http.Path;
  */
 public interface API {
 
-    @GET("users/{user}/puzzles")
-    Call<List<Puzzle>> listRepos(@Path("user") String userID);
+    @GET("/puzzles")
+    Call<JsonObject> getTest();
+
+    @GET("/puzzles/{user}")
+    Call<List<Puzzle>> getPuzzles(@Path("user") String userID);
 
 
 }

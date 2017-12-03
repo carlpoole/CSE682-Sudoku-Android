@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import codes.carl.sudoku.Network.Client;
+
 public class PuzzleList extends AppCompatActivity {
 
     @Override
@@ -27,6 +29,9 @@ public class PuzzleList extends AppCompatActivity {
 
             }
         });
+
+        Client client = Client.getInstance();
+        client.test();
     }
 
     @Override
