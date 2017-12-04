@@ -1,15 +1,17 @@
-package codes.carl.sudoku.UI;
+package codes.carl.sudoku.UI.Views;
 
 import android.view.TextureView;
 import android.view.ViewGroup;
 
 /**
- * Created by cma on 12/3/17.
+ * AutoFit Texture View
+ * <p>
+ * Adapted from AutoFitTextureView: https://github.com/googlesamples/android-Camera2Basic.
+ *
+ * @author Carl Poole
  */
-
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.TextureView;
 
 /**
  * A {@link TextureView} that can be adjusted to a specified aspect ratio.
@@ -57,7 +59,7 @@ public class AutoFitTextureView extends TextureView {
         int height = MeasureSpec.getSize(heightMeasureSpec);
         int margin = (height - width) / 2;
 
-        if(!mWithMargin) {
+        if (!mWithMargin) {
             mWithMargin = true;
             ViewGroup.MarginLayoutParams margins = ViewGroup.MarginLayoutParams.class.cast(getLayoutParams());
             margins.topMargin = -margin;

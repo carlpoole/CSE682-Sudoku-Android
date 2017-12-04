@@ -12,6 +12,14 @@ import codes.carl.sudoku.Network.Client;
 import codes.carl.sudoku.R;
 import codes.carl.sudoku.SudokuApplication;
 
+
+/**
+ * Puzzle List Activity
+ * <p>
+ * List the sudoku puzzles added by the user.
+ *
+ * @author Carl Poole
+ */
 public class PuzzleList extends BaseActivity {
 
     @Override

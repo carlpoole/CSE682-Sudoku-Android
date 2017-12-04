@@ -12,9 +12,10 @@ import codes.carl.sudoku.Events.PuzzleCapturedEvent;
 import codes.carl.sudoku.ImageProcesser;
 
 /**
- * Created by cma on 12/3/17.
+ * Base Activity Class.
+ * <p>
+ * Parent class to all classes in the application.
  */
-
 public class BaseActivity extends AppCompatActivity {
 
     @Override
@@ -27,11 +28,6 @@ public class BaseActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void processImage(PuzzleCapturedEvent event){
-        ImageProcesser.process(this, event.imagePath);
     }
 
 }

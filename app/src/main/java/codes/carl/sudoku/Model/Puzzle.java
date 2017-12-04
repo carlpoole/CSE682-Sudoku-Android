@@ -1,11 +1,15 @@
 package codes.carl.sudoku.Model;
 
 /**
- * Created by cma on 11/19/17.
+ * Puzzle Model Class
+ * <p>
+ * Represents the puzzle details for a single sudoku puzzle.
+ *
+ * @author Carl Poole
  */
-
 public class Puzzle {
 
+    String uuid;
     String name;
     int[][] grid;
 

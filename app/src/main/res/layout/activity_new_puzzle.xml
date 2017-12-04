@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <codes.carl.sudoku.UI.AutoFitTextureView
+    <codes.carl.sudoku.UI.Views.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <codes.carl.sudoku.OverlayView
+    <codes.carl.sudoku.UI.Views.OverlayView
         android:id="@+id/myRectangleView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

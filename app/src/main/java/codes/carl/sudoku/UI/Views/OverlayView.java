@@ -1,4 +1,4 @@
-package codes.carl.sudoku;
+package codes.carl.sudoku.UI.Views;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,12 +7,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
+
+import codes.carl.sudoku.R;
 
 /**
  * Overlay View

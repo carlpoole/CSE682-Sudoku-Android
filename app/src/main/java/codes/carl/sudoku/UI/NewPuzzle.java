@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
@@ -26,7 +25,6 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,6 +44,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -61,9 +61,20 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import codes.carl.sudoku.Events.PuzzleCapturedEvent;
-import codes.carl.sudoku.OverlayView;
+import codes.carl.sudoku.ImageProcesser;
 import codes.carl.sudoku.R;
+import codes.carl.sudoku.UI.Views.AutoFitTextureView;
+import codes.carl.sudoku.UI.Views.OverlayView;
 
+/**
+ * New Puzzle Activity
+ * <p>
+ * Add a new sudoku puzzle.
+ * <p>
+ * Adapted from: https://github.com/googlesamples/android-Camera2Basic.
+ *
+ * @author Carl Poole
+ */
 public class NewPuzzle extends BaseActivity implements View.OnClickListener {
 
     /**
@@ -241,20 +252,6 @@ public class NewPuzzle extends BaseActivity implements View.OnClickListener {
     private File mFile;
 
     /**
-     * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
-     * still image is ready to be saved.
-     */
-    private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
-            = new ImageReader.OnImageAvailableListener() {
-
-        @Override
-        public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
-        }
-
-    };
-
-    /**
      * {@link CaptureRequest.Builder} for the camera preview
      */
     private CaptureRequest.Builder mPreviewRequestBuilder;
@@ -285,6 +282,33 @@ public class NewPuzzle extends BaseActivity implements View.OnClickListener {
      * Orientation of the camera sensor
      */
     private int mSensorOrientation;
+
+    /**
+     * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
+     * still image is ready to be saved.
+     */
+    private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
+            = new ImageReader.OnImageAvailableListener() {
+
+        @Override
+        public void onImageAvailable(ImageReader reader) {
+            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
+        }
+
+    };
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void postImageEvents(PuzzleCapturedEvent event) {
+
+        // Todo: Display progress mask
+
+        // Process Image
+        ImageProcesser.process(event.imagePath);
+
+        // Todo: Upload and handle response
+        // Take the user to the details screen for the puzzle.
+
+    }
 
     /**
      * A {@link CameraCaptureSession.CaptureCallback} that handles events related to JPEG capture.

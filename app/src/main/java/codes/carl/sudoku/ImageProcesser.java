@@ -3,8 +3,6 @@ package codes.carl.sudoku;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.Log;
 
 import com.zomato.photofilters.imageprocessors.Filter;
@@ -16,9 +14,8 @@ import java.io.IOException;
 
 
 /**
- * Created by cma on 12/3/17.
+ *
  */
-
 public class ImageProcesser {
 
     /**
@@ -26,16 +23,16 @@ public class ImageProcesser {
      */
     private static final String TAG = "IMGPROC";
 
-    public static void process(Context context, String path){
+    public static void process(String path) {
         //crop();
-        enhance(context, path);
+        enhance(path);
     }
 
-    private static void crop(){
+    private static void crop() {
 
     }
 
-    private static void enhance(Context context, String path){
+    private static void enhance(String path) {
         Filter myFilter = new Filter();
         myFilter.addSubFilter(new BrightnessSubfilter(10));
         myFilter.addSubFilter(new ContrastSubfilter(1.5f));
