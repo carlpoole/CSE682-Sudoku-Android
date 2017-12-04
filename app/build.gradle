@@ -22,6 +22,8 @@ dependencies {
 
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'org.greenrobot:eventbus:3.1.1'
+    compile 'com.github.zomato:androidphotofilters:1.0.1'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:26.1.0'

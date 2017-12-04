@@ -20,6 +20,10 @@ public class SudokuApplication extends Application {
      */
     private static SudokuApplication instance;
 
+    static {
+        System.loadLibrary("NativeImageProcessor");
+    }
+
     /**
      * Gets the single instance of this class.
      *

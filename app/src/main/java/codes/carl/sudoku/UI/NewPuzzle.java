@@ -1,4 +1,4 @@
-package codes.carl.sudoku;
+package codes.carl.sudoku.UI;
 
 import android.Manifest;
 import android.app.Activity;
@@ -8,15 +8,10 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -31,6 +26,7 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,19 +36,18 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
-import android.view.LayoutInflater;
 import android.view.Surface;
-import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -65,7 +60,11 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-public class NewPuzzle extends AppCompatActivity implements View.OnClickListener {
+import codes.carl.sudoku.Events.PuzzleCapturedEvent;
+import codes.carl.sudoku.OverlayView;
+import codes.carl.sudoku.R;
+
+public class NewPuzzle extends BaseActivity implements View.OnClickListener {
 
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -133,8 +132,6 @@ public class NewPuzzle extends AppCompatActivity implements View.OnClickListener
         findViewById(R.id.picture).setOnClickListener(this);
         findViewById(R.id.info).setOnClickListener(this);
         mTextureView = findViewById(R.id.texture);
-
-        overlayGuide();
     }
 
     /**
@@ -174,7 +171,7 @@ public class NewPuzzle extends AppCompatActivity implements View.OnClickListener
     /**
      * An {@link TextureView} for camera preview.
      */
-    private TextureView mTextureView;
+    private AutoFitTextureView mTextureView;
 
     /**
      * A {@link CameraCaptureSession } for camera preview.
@@ -563,7 +560,7 @@ public class NewPuzzle extends AppCompatActivity implements View.OnClickListener
                         rotatedPreviewWidth, rotatedPreviewHeight, maxPreviewWidth,
                         maxPreviewHeight, largest);
 
-//                // We fit the aspect ratio of TextureView to the size of preview we picked.
+                // We fit the aspect ratio of TextureView to the size of preview we picked.
 //                int orientation = getResources().getConfiguration().orientation;
 //                if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
 //                    mTextureView.setAspectRatio(
@@ -882,41 +879,6 @@ public class NewPuzzle extends AppCompatActivity implements View.OnClickListener
         }
     }
 
-    public void overlayGuide() {
-
-        int outerFillColor = 0xDD000000;
-
-        RectF square = new RectF(0, 0, 300,300);
-
-        // first create an off-screen bitmap and its canvas
-        Bitmap bitmap = Bitmap.createBitmap(mTextureView.getMeasuredWidth(), mTextureView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas();
-        Canvas auxCanvas = new Canvas(bitmap);
-
-        // then fill the bitmap with the desired outside color
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(outerFillColor);
-        paint.setStyle(Paint.Style.FILL);
-        auxCanvas.drawPaint(paint);
-
-        // then punch a transparent hole in the shape of the rect
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        auxCanvas.drawRoundRect(square, 1.0F, 1.0F, paint);
-
-        // then draw the white rect border (being sure to get rid of the xfer mode!)
-        paint.setXfermode(null);
-        paint.setColor(Color.WHITE);
-        paint.setStyle(Paint.Style.STROKE);
-        auxCanvas.drawRoundRect(square, 1.0F, 1.0F, paint);
-
-        // finally, draw the whole thing to the original canvas
-        canvas.drawBitmap(bitmap, 0, 0, paint);
-
-        SurfaceView surfaceView = findViewById(R.id.myRectangleView);
-        surfaceView.draw(auxCanvas);
-
-    }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -954,6 +916,7 @@ public class NewPuzzle extends AppCompatActivity implements View.OnClickListener
          * The file we save the image into.
          */
         private final File mFile;
+        private OverlayView mOverlayView;
 
         ImageSaver(Image image, File file) {
             mImage = image;
@@ -963,16 +926,36 @@ public class NewPuzzle extends AppCompatActivity implements View.OnClickListener
         @Override
         public void run() {
             ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
+
+
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
+
+            Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
+
+            int left = 0;
+            int right = bitmapImage.getWidth();
+            int top = Math.max(0, (bitmapImage.getHeight() / 2) - (right - (bitmapImage.getWidth() / 2) + 200));
+            int bottom = (bitmapImage.getHeight() / 2) + (right - (bitmapImage.getWidth() / 2) - 200);
+
+            bitmapImage = Bitmap.createBitmap(bitmapImage, left, top, right, bottom);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            bytes = stream.toByteArray();
+
             FileOutputStream output = null;
             try {
                 output = new FileOutputStream(mFile);
                 output.write(bytes);
+
+                // Process image
+                EventBus.getDefault().post(new PuzzleCapturedEvent(mFile.getPath()));
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
                 mImage.close();
+
                 if (null != output) {
                     try {
                         output.close();

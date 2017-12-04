@@ -14,8 +14,9 @@
 
     <string name="title_activity_new_puzzle">New Puzzle</string>
 
-    <string name="picture">Picture</string>
+    <string name="picture">Take Picture</string>
     <string name="description_info">Info</string>
     <string name="request_permission">Please provide the camera permission to capture puzzle pictures.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+    <string name="camera_help_txt">Center the puzzle in the frame and tap the button. Make sure it is clearly visible and in focus!</string>
 </resources>

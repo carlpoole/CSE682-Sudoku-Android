@@ -1,5 +1,6 @@
 package codes.carl.sudoku.Network;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -26,9 +27,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class Client {
 
+    /**
+     * Log identifier.
+     */
     private static final String TAG = "NETWORK";
-    private static final String BASE_URL = "https://guarded-atoll-98665.herokuapp.com/";
 
+    /**
+     * The base URL for the API connection.
+     */
+    private static final String BASE_URL = "https://sudoku-dev.herokuapp.com/";
+
+    /**
+     * The API interface describing the API routes.
+     */
     private API webService;
 
     /**
@@ -54,6 +65,9 @@ public class Client {
         return instance;
     }
 
+    /**
+     * Setup API connection
+     */
     private void initialize() {
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -64,35 +78,46 @@ public class Client {
         webService = retrofit.create(API.class);
     }
 
+    /**
+     * Test the API connection.
+     */
     public void test() {
         Call<JsonObject> test = webService.getTest();
 
         test.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.d(TAG, response.body().toString());
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                JsonObject body = response.body();
+
+                if (body != null)
+                    Log.d(TAG, body.toString());
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 Log.e(TAG, t.getMessage());
             }
         });
 
     }
 
+    /**
+     * Get the list of puzzles for the provided user.
+     *
+     * @param userID The ID of the user.
+     */
     public void getPuzzles(String userID) {
 
         Call<List<Puzzle>> call = webService.getPuzzles(userID);
 
         call.enqueue(new Callback<List<Puzzle>>() {
             @Override
-            public void onResponse(Call<List<Puzzle>> call, Response<List<Puzzle>> response) {
+            public void onResponse(@NonNull Call<List<Puzzle>> call, @NonNull Response<List<Puzzle>> response) {
                 Log.d(TAG, response.toString());
             }
 
             @Override
-            public void onFailure(Call<List<Puzzle>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Puzzle>> call, @NonNull Throwable t) {
                 Log.e(TAG, t.getMessage());
             }
         });
