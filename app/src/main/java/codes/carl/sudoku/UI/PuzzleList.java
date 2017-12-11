@@ -40,7 +40,7 @@ public class PuzzleList extends BaseActivity {
         });
 
         Client client = Client.getInstance();
-        client.test();
+        client.ping();
     }
 
     @Override

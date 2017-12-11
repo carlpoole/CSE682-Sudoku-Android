@@ -8,7 +8,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 
+import codes.carl.sudoku.Events.PingAPIEvent;
 import codes.carl.sudoku.Events.PuzzleCapturedEvent;
+import codes.carl.sudoku.Events.RefreshListEvent;
 import codes.carl.sudoku.ImageProcesser;
 
 /**
@@ -28,6 +30,11 @@ public class BaseActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void pingAPI(PingAPIEvent event){
+
     }
 
 }

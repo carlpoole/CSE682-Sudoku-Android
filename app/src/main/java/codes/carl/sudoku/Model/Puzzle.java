@@ -9,8 +9,9 @@ package codes.carl.sudoku.Model;
  */
 public class Puzzle {
 
-    String uuid;
-    String name;
-    int[][] grid;
+    String id;
+    String createDate;
+    int[][] state;
+    int[][] solution;
 
 }

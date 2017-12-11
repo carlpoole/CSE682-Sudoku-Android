@@ -6,4 +6,5 @@
     <color name="control_background">#cc4285f4</color>
     <color name="camera_overlay">#040a28</color>
     <color name="camera_overlay_text_color">#ffffff</color>
+    <color name="progress_mask">#c8000000</color>
 </resources>

@@ -9,9 +9,15 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.List;
 
 import codes.carl.sudoku.Model.Puzzle;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,9 +76,15 @@ public class Client {
      */
     private void initialize() {
 
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build();
 
         webService = retrofit.create(API.class);
@@ -81,8 +93,8 @@ public class Client {
     /**
      * Test the API connection.
      */
-    public void test() {
-        Call<JsonObject> test = webService.getTest();
+    public void ping() {
+        Call<JsonObject> test = webService.ping();
 
         test.enqueue(new Callback<JsonObject>() {
             @Override
@@ -96,6 +108,42 @@ public class Client {
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 Log.e(TAG, t.getMessage());
+            }
+        });
+
+    }
+
+
+    public void uploadPuzzle(String imagePath, String userID) {
+
+        File file = new File(imagePath);
+
+        RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);
+        RequestBody user = RequestBody.create(MediaType.parse("text/plain"), userID);
+
+        Call<Puzzle> call = webService.postImage(body, user);
+        call.enqueue(new Callback<Puzzle>() {
+            @Override
+            public void onResponse(@NonNull Call<Puzzle> call, @NonNull Response<Puzzle> response) {
+
+                if (response.isSuccessful()) {
+                    // Do awesome stuff
+                    Log.d(TAG, "Success");
+                } else if (response.code() == 401) {
+                    // Handle unauthorized
+                    Log.e(TAG, "Unauthorized");
+                } else {
+                    // Handle other responses
+                    Log.e(TAG, response.code() + ": " + response.message());
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Puzzle> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "Post fail");
+                // Todo: Error request handling
             }
         });
 

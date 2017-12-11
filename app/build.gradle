@@ -22,6 +22,7 @@ dependencies {
 
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
     compile 'org.greenrobot:eventbus:3.1.1'
     compile 'com.github.zomato:androidphotofilters:1.0.1'
 
