@@ -4,14 +4,18 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.util.List;
 
+import codes.carl.sudoku.Events.PuzzleUploadedEvent;
 import codes.carl.sudoku.Model.Puzzle;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -77,7 +81,7 @@ public class Client {
     private void initialize() {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        interceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
 
@@ -122,13 +126,16 @@ public class Client {
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);
         RequestBody user = RequestBody.create(MediaType.parse("text/plain"), userID);
 
-        Call<Puzzle> call = webService.postImage(body, user);
-        call.enqueue(new Callback<Puzzle>() {
+        Call<JsonArray> call = webService.postImage(body, user);
+        call.enqueue(new Callback<JsonArray>() {
             @Override
-            public void onResponse(@NonNull Call<Puzzle> call, @NonNull Response<Puzzle> response) {
+            public void onResponse(@NonNull Call<JsonArray> call, @NonNull Response<JsonArray> response) {
 
                 if (response.isSuccessful()) {
                     // Do awesome stuff
+                    Gson gson = new GsonBuilder().create();
+                    int[][] stateArray = gson.fromJson(response.body(), int[][].class);
+                    EventBus.getDefault().post(new PuzzleUploadedEvent(stateArray));
                     Log.d(TAG, "Success");
                 } else if (response.code() == 401) {
                     // Handle unauthorized
@@ -141,11 +148,13 @@ public class Client {
             }
 
             @Override
-            public void onFailure(@NonNull Call<Puzzle> call, @NonNull Throwable throwable) {
+            public void onFailure(@NonNull Call<JsonArray> call, @NonNull Throwable throwable) {
                 Log.e(TAG, "Post fail");
                 // Todo: Error request handling
             }
         });
+
+
 
     }
 

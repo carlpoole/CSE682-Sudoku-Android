@@ -1,5 +1,6 @@
 package codes.carl.sudoku.Network;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
@@ -29,9 +30,13 @@ public interface API {
     @GET("/ping")
     Call<JsonObject> ping();
 
+//    @Multipart
+//    @POST("/puzzles")
+//    Call<Puzzle> postImage(@Part MultipartBody.Part image, @Part("userId") RequestBody name);
+
     @Multipart
     @POST("/puzzles")
-    Call<Puzzle> postImage(@Part MultipartBody.Part image, @Part("userId") RequestBody name);
+    Call<JsonArray> postImage(@Part MultipartBody.Part image, @Part("userId") RequestBody name);
 
     @GET("/users/{userID}/puzzles")
     Call<List<Puzzle>> getPuzzles(@Path("userID") String userID);

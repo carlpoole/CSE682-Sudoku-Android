@@ -57,11 +57,22 @@
 
     </FrameLayout>
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/progress_mask"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/progress_mask"/>
+        android:background="@color/progress_mask">
+
+        <TextView
+            android:id="@+id/progress_status"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="96dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"/>
+
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

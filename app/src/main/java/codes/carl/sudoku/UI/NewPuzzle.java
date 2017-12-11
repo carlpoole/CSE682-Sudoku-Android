@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +43,8 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -62,6 +65,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import codes.carl.sudoku.Events.PuzzleCapturedEvent;
+import codes.carl.sudoku.Events.PuzzleUploadedEvent;
 import codes.carl.sudoku.Events.RefreshListEvent;
 import codes.carl.sudoku.ImageProcesser;
 import codes.carl.sudoku.Network.Client;
@@ -148,6 +152,7 @@ public class NewPuzzle extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.info).setOnClickListener(this);
         mTextureView = findViewById(R.id.texture);
         progressMask = findViewById(R.id.progress_mask);
+        progressStatus = findViewById(R.id.progress_status);
     }
 
     /**
@@ -178,7 +183,8 @@ public class NewPuzzle extends BaseActivity implements View.OnClickListener {
 
     };
 
-    FrameLayout progressMask;
+    RelativeLayout progressMask;
+    TextView progressStatus;
 
     /**
      * ID of the current {@link CameraDevice}.
@@ -308,10 +314,27 @@ public class NewPuzzle extends BaseActivity implements View.OnClickListener {
 
         // Process Image
         ImageProcesser.process(event.imagePath);
-        Client.getInstance().uploadPuzzle(event.imagePath, SudokuApplication.getInstance().getIdentity(this));
 
-        // Todo: Upload and handle response
-        // Take the user to the details screen for the puzzle.
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressStatus.setText(R.string.upload_status);
+            }
+        });
+
+        Client.getInstance().uploadPuzzle(
+                event.imagePath,
+                SudokuApplication.getInstance().getIdentity(this));
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void postImageUpload(PuzzleUploadedEvent event) {
+
+        Intent intent = new Intent(NewPuzzle.this, PuzzleDetails.class);
+        intent.putExtra("puzzle_state", event.puzzleState);
+        startActivity(intent);
+        finish();
 
     }
 
@@ -382,20 +405,6 @@ public class NewPuzzle extends BaseActivity implements View.OnClickListener {
         }
 
     };
-
-    /**
-     * Shows a {@link Toast} on the UI thread.
-     *
-     * @param text The message to show
-     */
-    private void showToast(final String text) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(NewPuzzle.this, text, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     /**
      * Given {@code choices} of {@code Size}s supported by a camera, choose the smallest one that
@@ -740,7 +749,7 @@ public class NewPuzzle extends BaseActivity implements View.OnClickListener {
                         @Override
                         public void onConfigureFailed(
                                 @NonNull CameraCaptureSession cameraCaptureSession) {
-                            showToast("Failed");
+                            Log.e(TAG,"Image capture failed.");
                         }
                     }, null
             );
@@ -859,8 +868,7 @@ public class NewPuzzle extends BaseActivity implements View.OnClickListener {
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-                    showToast("Saved: " + mFile);
-                    Log.d(TAG, mFile.toString());
+                    Log.d(TAG,"Saved: " + mFile);
                     unlockFocus();
                 }
             };
@@ -921,6 +929,7 @@ public class NewPuzzle extends BaseActivity implements View.OnClickListener {
                 });
 
                 progressMask.setVisibility(View.VISIBLE);
+                progressStatus.setText(R.string.preupload_status);
 
                 takePicture();
                 break;
