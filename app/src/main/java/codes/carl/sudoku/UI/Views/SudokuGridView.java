@@ -56,12 +56,14 @@ public class SudokuGridView extends GridView {
             int left = child.getLeft();
             int right = child.getRight();
 
+            // Draw a thicker vertical line on the right of columns 3 and 6
             if ((i + 1) % 3 == 0 && (i + 1) % 9 != 0) {
                 canvas.drawLine(right, top, right, bottom, quadrantPaint);
             } else if ((i + 1) % 9 != 0) {
                 canvas.drawLine(right, top + thicknessOffset, right, bottom - thicknessOffset, gridPaint);
             }
 
+            // Draw a thicker horizontal line on the bottom of rows 3 and 6
             if (((i + 1) % 27 > 18 || (i + 1) % 27 == 0) && i < 64 && i > 0) {
                 canvas.drawLine(left, bottom, right, bottom, quadrantPaint);
             } else if (i < 72) {

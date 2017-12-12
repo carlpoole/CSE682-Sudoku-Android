@@ -1,4 +1,4 @@
-package codes.carl.sudoku;
+package codes.carl.sudoku.Utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -3,6 +3,7 @@ package codes.carl.sudoku.Model;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Puzzle Model Class
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 @Parcel
 public class Puzzle {
 
-    public String id;
+    public String id = UUID.randomUUID().toString();
     public String createDate;
     public int[][] state;
     public int[][] solution;

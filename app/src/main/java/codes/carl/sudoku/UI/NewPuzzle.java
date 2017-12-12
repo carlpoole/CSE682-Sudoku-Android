@@ -42,10 +42,8 @@ import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -67,13 +65,13 @@ import java.util.concurrent.TimeUnit;
 
 import codes.carl.sudoku.Events.PuzzleCapturedEvent;
 import codes.carl.sudoku.Events.PuzzleUploadedEvent;
-import codes.carl.sudoku.Events.RefreshListEvent;
-import codes.carl.sudoku.ImageProcesser;
+import codes.carl.sudoku.Utils.ImageProcesser;
 import codes.carl.sudoku.Network.Client;
 import codes.carl.sudoku.R;
 import codes.carl.sudoku.SudokuApplication;
 import codes.carl.sudoku.UI.Views.AutoFitTextureView;
 import codes.carl.sudoku.UI.Views.OverlayView;
+import codes.carl.sudoku.Utils.StorageManager;
 
 /**
  * New Puzzle Activity
@@ -331,6 +329,8 @@ public class NewPuzzle extends BaseActivity implements View.OnClickListener {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void postImageUpload(PuzzleUploadedEvent event) {
+
+        StorageManager.getInstance(this).savePuzzle(event.puzzle);
 
         Intent intent = new Intent(NewPuzzle.this, PuzzleDetails.class);
         intent.putExtra("puzzle", Parcels.wrap(event.puzzle));

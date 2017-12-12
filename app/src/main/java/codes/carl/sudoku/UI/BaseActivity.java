@@ -6,12 +6,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
-
 import codes.carl.sudoku.Events.PingAPIEvent;
-import codes.carl.sudoku.Events.PuzzleCapturedEvent;
-import codes.carl.sudoku.Events.RefreshListEvent;
-import codes.carl.sudoku.ImageProcesser;
 
 /**
  * Base Activity Class.

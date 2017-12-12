@@ -19,6 +19,7 @@ import java.util.Arrays;
 
 import codes.carl.sudoku.Model.Puzzle;
 import codes.carl.sudoku.R;
+import codes.carl.sudoku.Utils.StorageManager;
 
 public class PuzzleDetails extends BaseActivity {
 
