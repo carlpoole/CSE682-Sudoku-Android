@@ -751,7 +751,7 @@ public class NewPuzzle extends BaseActivity implements View.OnClickListener {
                         @Override
                         public void onConfigureFailed(
                                 @NonNull CameraCaptureSession cameraCaptureSession) {
-                            Log.e(TAG,"Image capture failed.");
+                            Log.e(TAG, "Image capture failed.");
                         }
                     }, null
             );
@@ -870,7 +870,7 @@ public class NewPuzzle extends BaseActivity implements View.OnClickListener {
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-                    Log.d(TAG,"Saved: " + mFile);
+                    Log.d(TAG, "Saved: " + mFile);
                     unlockFocus();
                 }
             };
@@ -976,7 +976,6 @@ public class NewPuzzle extends BaseActivity implements View.OnClickListener {
         @Override
         public void run() {
             ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
-
 
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);

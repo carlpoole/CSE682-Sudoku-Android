@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#1dafcf</color>
+    <color name="colorPrimaryDark">#036e85</color>
+    <color name="colorAccent">#e92894</color>
+    <color name="colorAccent2">#f7e63b</color>
     <color name="control_background">#cc4285f4</color>
     <color name="camera_overlay">#040a28</color>
     <color name="camera_overlay_text_color">#ffffff</color>
     <color name="progress_mask">#c8000000</color>
+    <color name="grid_divider">#b0b0b0</color>
+    <color name="quadrant_divider">#263238</color>
 </resources>

@@ -49,7 +49,7 @@ public class PuzzleDetails extends BaseActivity {
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
+                        switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 ArrayList<Integer> array = Puzzle.getPuzzleAsArrayList(puzzle.solution);
                                 adapter.clear();

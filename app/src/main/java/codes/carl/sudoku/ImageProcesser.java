@@ -28,10 +28,6 @@ public class ImageProcesser {
         enhance(path);
     }
 
-    private static void crop() {
-
-    }
-
     private static void enhance(String path) {
         Filter myFilter = new Filter();
         myFilter.addSubFilter(new BrightnessSubfilter(10));
