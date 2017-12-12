@@ -1,6 +1,8 @@
 package codes.carl.sudoku.UI;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import org.parceler.Parcels;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import codes.carl.sudoku.Model.Puzzle;
@@ -35,33 +38,36 @@ public class PuzzleDetails extends BaseActivity {
 
         puzzle = Parcels.unwrap(getIntent().getParcelableExtra("puzzle"));
 
-        int[][] puzzleState = puzzle.state;
+        ArrayList<Integer> array = Puzzle.getPuzzleAsArrayList(puzzle.state);
 
-        Integer[] array = new Integer[81];
-        int k=0;
-        for(int i = 0; i < 9; i++){
-            for(int j = 0; j < 9; j++){
-                array[k++]= puzzleState[i][j];
-            }
-        }
-
-        adapter = new ArrayAdapter<Integer>(this, R.layout.sudoku_grid_item, array);
+        adapter = new ArrayAdapter<>(this, R.layout.sudoku_grid_item, array);
         sudokuGrid.setAdapter(adapter);
         solutionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int[][] puzzleState = puzzle.solution;
 
-                Integer[] array = new Integer[81];
-                int k=0;
-                for(int i = 0; i < 9; i++){
-                    for(int j = 0; j < 9; j++){
-                        array[k++]= puzzleState[i][j];
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                ArrayList<Integer> array = Puzzle.getPuzzleAsArrayList(puzzle.solution);
+                                adapter.clear();
+                                adapter.addAll(array);
+                                adapter.notifyDataSetChanged();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                break;
+                        }
                     }
-                }
+                };
 
-                adapter = new ArrayAdapter<Integer>(PuzzleDetails.this, R.layout.sudoku_grid_item, array);
-                sudokuGrid.setAdapter(adapter);
+                AlertDialog.Builder builder = new AlertDialog.Builder(PuzzleDetails.this);
+                builder.setMessage("Are you sure you want to see the solution?")
+                        .setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener)
+                        .show();
 
             }
         });

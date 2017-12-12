@@ -19,8 +19,8 @@
     <string name="request_permission">Please provide the camera permission to capture puzzle pictures.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
     <string name="camera_help_txt">Center the puzzle in the frame and tap the button. Make sure it is clearly visible and in focus!</string>
-    <string name="get_hint">Get Hint</string>
-    <string name="get_solution">Get Solution</string>
-    <string name="preupload_status">Preparing image for upload...</string>
-    <string name="upload_status">Submitting Puzzle...</string>
+    <string name="get_hint">Get a Hint</string>
+    <string name="get_solution">See Solution</string>
+    <string name="preupload_status">Preparing image for upload…</string>
+    <string name="upload_status">Submitting Puzzle…</string>
 </resources>

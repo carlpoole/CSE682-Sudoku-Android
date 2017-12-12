@@ -2,6 +2,8 @@ package codes.carl.sudoku.Model;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
+
 /**
  * Puzzle Model Class
  * <p>
@@ -24,5 +26,17 @@ public class Puzzle {
         this.createDate = createDate;
         this.state = state;
         this.solution = solution;
+    }
+
+    public static ArrayList<Integer> getPuzzleAsArrayList(int[][] puzzle){
+        ArrayList<Integer> array = new ArrayList<>();
+
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                array.add(puzzle[i][j]);
+            }
+        }
+
+        return array;
     }
 }
