@@ -30,13 +30,9 @@ public interface API {
     @GET("/ping")
     Call<JsonObject> ping();
 
-//    @Multipart
-//    @POST("/puzzles")
-//    Call<Puzzle> postImage(@Part MultipartBody.Part image, @Part("userId") RequestBody name);
-
     @Multipart
     @POST("/puzzles")
-    Call<JsonArray> postImage(@Part MultipartBody.Part image, @Part("userId") RequestBody name);
+    Call<Puzzle> postImage(@Part MultipartBody.Part image, @Part("userId") RequestBody name);
 
     @GET("/users/{userID}/puzzles")
     Call<List<Puzzle>> getPuzzles(@Path("userID") String userID);

@@ -1,5 +1,7 @@
 package codes.carl.sudoku.Model;
 
+import org.parceler.Parcel;
+
 /**
  * Puzzle Model Class
  * <p>
@@ -7,11 +9,20 @@ package codes.carl.sudoku.Model;
  *
  * @author Carl Poole
  */
+@Parcel
 public class Puzzle {
 
-    String id;
-    String createDate;
-    int[][] state;
-    int[][] solution;
+    public String id;
+    public String createDate;
+    public int[][] state;
+    public int[][] solution;
 
+    public Puzzle() {}
+
+    public Puzzle(String id, String createDate, int[][] state, int[][] solution) {
+        this.id = id;
+        this.createDate = createDate;
+        this.state = state;
+        this.solution = solution;
+    }
 }

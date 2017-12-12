@@ -126,16 +126,16 @@ public class Client {
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);
         RequestBody user = RequestBody.create(MediaType.parse("text/plain"), userID);
 
-        Call<JsonArray> call = webService.postImage(body, user);
-        call.enqueue(new Callback<JsonArray>() {
+        Call<Puzzle> call = webService.postImage(body, user);
+        call.enqueue(new Callback<Puzzle>() {
             @Override
-            public void onResponse(@NonNull Call<JsonArray> call, @NonNull Response<JsonArray> response) {
+            public void onResponse(@NonNull Call<Puzzle> call, @NonNull Response<Puzzle> response) {
 
                 if (response.isSuccessful()) {
                     // Do awesome stuff
                     Gson gson = new GsonBuilder().create();
-                    int[][] stateArray = gson.fromJson(response.body(), int[][].class);
-                    EventBus.getDefault().post(new PuzzleUploadedEvent(stateArray));
+                    //int[][] stateArray = response.body().state;
+                    EventBus.getDefault().post(new PuzzleUploadedEvent(response.body()));
                     Log.d(TAG, "Success");
                 } else if (response.code() == 401) {
                     // Handle unauthorized
@@ -148,7 +148,7 @@ public class Client {
             }
 
             @Override
-            public void onFailure(@NonNull Call<JsonArray> call, @NonNull Throwable throwable) {
+            public void onFailure(@NonNull Call<Puzzle> call, @NonNull Throwable throwable) {
                 Log.e(TAG, "Post fail");
                 // Todo: Error request handling
             }

@@ -1,14 +1,16 @@
 package codes.carl.sudoku.Events;
 
+import codes.carl.sudoku.Model.Puzzle;
+
 /**
  * Created by cma on 12/10/17.
  */
 
 public class PuzzleUploadedEvent {
 
-    public int[][] puzzleState;
+    public Puzzle puzzle;
 
-    public PuzzleUploadedEvent(int[][] puzzleState) {
-        this.puzzleState = puzzleState;
+    public PuzzleUploadedEvent(Puzzle puzzle) {
+        this.puzzle = puzzle;
     }
 }

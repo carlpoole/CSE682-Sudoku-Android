@@ -50,6 +50,7 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.parceler.Parcels;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -332,7 +333,8 @@ public class NewPuzzle extends BaseActivity implements View.OnClickListener {
     public void postImageUpload(PuzzleUploadedEvent event) {
 
         Intent intent = new Intent(NewPuzzle.this, PuzzleDetails.class);
-        intent.putExtra("puzzle_state", event.puzzleState);
+        intent.putExtra("puzzle", Parcels.wrap(event.puzzle));
+
         startActivity(intent);
         finish();
 
