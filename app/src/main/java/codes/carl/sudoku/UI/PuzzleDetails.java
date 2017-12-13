@@ -86,12 +86,28 @@ public class PuzzleDetails extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPuzzleHintUpdate(PuzzleHintEvent event){
+    public void onPuzzleHintUpdate(PuzzleHintEvent event) {
+
+        // Clear selection on previous hint if applicable
+        if(puzzle.hintCoords != null)
+            sudokuGrid.getChildAt((puzzle.hintCoords[0] * 9) + puzzle.hintCoords[1]).setBackground(null);
+
+
+        // Carry solution and date from previous puzzle
+        event.puzzle.solution = puzzle.solution;
+        event.puzzle.createDate = puzzle.createDate;
+
+        // Replace current puzzle with new puzzle object
         puzzle = event.puzzle;
+
+        // Update puzzle values in the grid on the screen
         ArrayList<Integer> array = Puzzle.getPuzzleAsArrayList(puzzle.state);
         adapter.clear();
         adapter.addAll(array);
+
+        // Highlight the cell of the hint we just got
+        sudokuGrid.getChildAt((puzzle.hintCoords[0] * 9) + puzzle.hintCoords[1])
+                .setBackgroundResource(R.drawable.grid_selected_rectangle);
         adapter.notifyDataSetChanged();
-        // Todo: highlight coordinate of hint
     }
 }
