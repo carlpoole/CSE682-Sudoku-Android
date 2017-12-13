@@ -15,6 +15,7 @@ import java.util.UUID;
 @Parcel
 public class Puzzle {
 
+    public String error;
     public String id = UUID.randomUUID().toString();
     public String createDate;
     public int[][] state;

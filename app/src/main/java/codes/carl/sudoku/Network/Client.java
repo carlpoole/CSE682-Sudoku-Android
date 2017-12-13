@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import codes.carl.sudoku.Events.PuzzleUploadedEvent;
@@ -130,13 +131,18 @@ public class Client {
         call.enqueue(new Callback<Puzzle>() {
             @Override
             public void onResponse(@NonNull Call<Puzzle> call, @NonNull Response<Puzzle> response) {
+                Gson gson = new GsonBuilder().create();
 
                 if (response.isSuccessful()) {
-                    // Do awesome stuff
-                    Gson gson = new GsonBuilder().create();
-                    //int[][] stateArray = response.body().state;
                     EventBus.getDefault().post(new PuzzleUploadedEvent(response.body()));
                     Log.d(TAG, "Success");
+                } else if (response.code() == 500) {
+                    try {
+                        Puzzle puzzleError = gson.fromJson(response.errorBody().string(), Puzzle.class);
+                        Log.e(TAG, puzzleError.error);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else if (response.code() == 401) {
                     // Handle unauthorized
                     Log.e(TAG, "Unauthorized");

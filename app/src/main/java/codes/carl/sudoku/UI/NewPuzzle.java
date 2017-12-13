@@ -340,6 +340,8 @@ public class NewPuzzle extends BaseActivity implements View.OnClickListener {
 
     }
 
+
+
     /**
      * A {@link CameraCaptureSession.CaptureCallback} that handles events related to JPEG capture.
      */
