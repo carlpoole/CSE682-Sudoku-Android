@@ -23,4 +23,6 @@
     <string name="get_solution">See Solution</string>
     <string name="preupload_status">Preparing image for upload…</string>
     <string name="upload_status">Submitting Puzzle…</string>
+    <string name="date_format">MM/dd/yyyy HH:mm:ss.SSS</string>
+    <string name="puzzle_from">Puzzle from</string>
 </resources>

@@ -3,6 +3,7 @@ package codes.carl.sudoku.Model;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -17,15 +18,15 @@ public class Puzzle {
 
     public String error;
     public String id = UUID.randomUUID().toString();
-    public String createDate;
+    public Date createDate = new Date();
     public int[][] state;
     public int[][] solution;
+    public int[] hintCoords;
 
     public Puzzle() {}
 
-    public Puzzle(String id, String createDate, int[][] state, int[][] solution) {
+    public Puzzle(String id, int[][] state, int[][] solution) {
         this.id = id;
-        this.createDate = createDate;
         this.state = state;
         this.solution = solution;
     }

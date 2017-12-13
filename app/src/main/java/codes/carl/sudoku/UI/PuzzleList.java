@@ -17,7 +17,12 @@ import android.widget.TextView;
 
 import org.parceler.Parcels;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Locale;
 
 import codes.carl.sudoku.Model.Puzzle;
 import codes.carl.sudoku.Network.Client;
@@ -36,6 +41,8 @@ import codes.carl.sudoku.Utils.StorageManager;
 public class PuzzleList extends BaseActivity {
 
     RecyclerView puzzleList;
+    PuzzleListAdapter adapter;
+    ArrayList<Puzzle> puzzles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +63,9 @@ public class PuzzleList extends BaseActivity {
 
         Client client = Client.getInstance();
 
-        ArrayList<Puzzle> puzzles = StorageManager.getInstance(this).getPuzzles();
-        Log.d("LIST", "Loaded Puzzles.");
-
         puzzleList = findViewById(R.id.puzzle_list);
         puzzleList.setLayoutManager(new LinearLayoutManager(this));
-        PuzzleListAdapter adapter = new PuzzleListAdapter(this, puzzles);
+        adapter = new PuzzleListAdapter(this);
 
         adapter.setClickListener(new ItemClickListener() {
             @Override
@@ -74,8 +78,32 @@ public class PuzzleList extends BaseActivity {
         });
         puzzleList.setAdapter(adapter);
 
-
         client.ping();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        puzzles = StorageManager.getInstance(this).getPuzzles();
+        Collections.sort(puzzles, new Comparator<Puzzle>() {
+            @Override
+            public int compare(Puzzle puzzle1, Puzzle puzzle2) {
+
+                if(puzzle1.createDate.before(puzzle2.createDate))
+                    return 1;
+
+                if(puzzle1.createDate.after(puzzle2.createDate))
+                    return -1;
+
+
+                return 0;
+            }
+        });
+
+        Log.d("LIST", "Loaded Puzzles.");
+        adapter.data = puzzles;
+        adapter.notifyDataSetChanged();
     }
 
     class PuzzleListAdapter extends RecyclerView.Adapter<PuzzleListAdapter.ViewHolder>{
@@ -83,6 +111,10 @@ public class PuzzleList extends BaseActivity {
         private ArrayList<Puzzle> data;
         private LayoutInflater inflater;
         private ItemClickListener clickListener;
+
+        public PuzzleListAdapter(Context context){
+            this.inflater = LayoutInflater.from(context);
+        }
 
         public PuzzleListAdapter(Context context, ArrayList<Puzzle> data){
             this.inflater = LayoutInflater.from(context);
@@ -99,12 +131,14 @@ public class PuzzleList extends BaseActivity {
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             Puzzle puzzle = data.get(position);
-            holder.puzzleDate.setText(puzzle.id);
+            SimpleDateFormat dateFormat = new SimpleDateFormat(getString(R.string.date_format), Locale.US);
+            String dateAsString = dateFormat.format(puzzle.createDate);
+            holder.puzzleDate.setText(String.format("%s %s", getString(R.string.puzzle_from), dateAsString));
         }
 
         @Override
         public int getItemCount() {
-            return data.size();
+            return data != null ? data.size() : 0;
         }
 
         public void setClickListener(ItemClickListener itemClickListener) {

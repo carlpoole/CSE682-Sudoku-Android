@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import codes.carl.sudoku.Events.PuzzleHintEvent;
 import codes.carl.sudoku.Events.PuzzleUploadedEvent;
 import codes.carl.sudoku.Model.Puzzle;
 import okhttp3.MediaType;
@@ -28,6 +29,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Network client class
@@ -88,6 +90,7 @@ public class Client {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();
@@ -160,32 +163,29 @@ public class Client {
             }
         });
 
-
-
     }
 
-    /**
-     * Get the list of puzzles for the provided user.
-     *
-     * @param userID The ID of the user.
-     */
-    public void getPuzzles(String userID) {
+    public void getPuzzleHint(Puzzle currentPuzzle){
+        Gson gson = new GsonBuilder().create();
 
-        Call<List<Puzzle>> call = webService.getPuzzles(userID);
-
-        call.enqueue(new Callback<List<Puzzle>>() {
+        String requestBody = "{\"state\":"+gson.toJson(currentPuzzle.state)+"}";
+        Call<Puzzle> call = webService.getPuzzleHint(requestBody);
+        call.enqueue(new Callback<Puzzle>() {
             @Override
-            public void onResponse(@NonNull Call<List<Puzzle>> call, @NonNull Response<List<Puzzle>> response) {
-                Log.d(TAG, response.toString());
+            public void onResponse(Call<Puzzle> call, Response<Puzzle> response) {
+                if(response.isSuccessful()){
+                    EventBus.getDefault().post(new PuzzleHintEvent(response.body()));
+                }else{
+                    Log.e(TAG, "Request problem - server!");
+                }
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<Puzzle>> call, @NonNull Throwable t) {
-                Log.e(TAG, t.getMessage());
+            public void onFailure(Call<Puzzle> call, Throwable t) {
+                Log.e(TAG, "Request problem - client!");
             }
         });
 
     }
-
 
 }

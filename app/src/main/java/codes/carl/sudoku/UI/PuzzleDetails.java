@@ -11,13 +11,17 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.parceler.Parcels;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import codes.carl.sudoku.Events.PuzzleHintEvent;
 import codes.carl.sudoku.Model.Puzzle;
+import codes.carl.sudoku.Network.Client;
 import codes.carl.sudoku.R;
 import codes.carl.sudoku.Utils.StorageManager;
 
@@ -72,5 +76,22 @@ public class PuzzleDetails extends BaseActivity {
 
             }
         });
+
+        hintButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Client.getInstance().getPuzzleHint(puzzle);
+            }
+        });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPuzzleHintUpdate(PuzzleHintEvent event){
+        puzzle = event.puzzle;
+        ArrayList<Integer> array = Puzzle.getPuzzleAsArrayList(puzzle.state);
+        adapter.clear();
+        adapter.addAll(array);
+        adapter.notifyDataSetChanged();
+        // Todo: highlight coordinate of hint
     }
 }
