@@ -86,20 +86,23 @@ public class PuzzleList extends BaseActivity {
         super.onResume();
 
         puzzles = StorageManager.getInstance(this).getPuzzles();
-        Collections.sort(puzzles, new Comparator<Puzzle>() {
-            @Override
-            public int compare(Puzzle puzzle1, Puzzle puzzle2) {
 
-                if(puzzle1.createDate.before(puzzle2.createDate))
-                    return 1;
+        if(puzzles != null){
+            Collections.sort(puzzles, new Comparator<Puzzle>() {
+                @Override
+                public int compare(Puzzle puzzle1, Puzzle puzzle2) {
 
-                if(puzzle1.createDate.after(puzzle2.createDate))
-                    return -1;
+                    if(puzzle1.createDate.before(puzzle2.createDate))
+                        return 1;
+
+                    if(puzzle1.createDate.after(puzzle2.createDate))
+                        return -1;
 
 
-                return 0;
-            }
-        });
+                    return 0;
+                }
+            });
+        }
 
         Log.d("LIST", "Loaded Puzzles.");
         adapter.data = puzzles;
