@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import codes.carl.sudoku.Events.PuzzleHintEvent;
 import codes.carl.sudoku.Events.PuzzleUploadedEvent;
@@ -85,7 +86,12 @@ public class Client {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+        final OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(20, TimeUnit.SECONDS)
+                .writeTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .addInterceptor(interceptor).build();
 
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -130,6 +136,7 @@ public class Client {
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);
         RequestBody user = RequestBody.create(MediaType.parse("text/plain"), userID);
 
+        Log.d(TAG, "Uploading puzzle...");
         Call<Puzzle> call = webService.postImage(body, user);
         call.enqueue(new Callback<Puzzle>() {
             @Override

@@ -51,7 +51,7 @@ public class OverlayView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        int outerFillColor = ContextCompat.getColor(getContext(), R.color.camera_overlay);
+        int outerFillColor = ContextCompat.getColor(getContext(), R.color.colorAccent2);
 
         int w = canvas.getWidth();
         int h = canvas.getHeight();
