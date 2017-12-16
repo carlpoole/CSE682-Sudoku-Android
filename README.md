@@ -25,6 +25,7 @@ The project is not currently configured to automatically sign for release. Confi
 ./gradlew assembleRelease
 ```
 
+
 ## Dependencies
 
 The back-end services this application depends on are accessible at the following repositories:
@@ -38,3 +39,9 @@ Android Application dependencies are linked in the build.gradle file:
 - [EventBus](https://github.com/greenrobot/EventBus)
 - [Parceler](https://github.com/johncarl81/parceler)
 - [AndroidPhotoFilters](https://github.com/Zomato/AndroidPhotoFilters)
+
+## UML Diagram
+
+Android SDK methods, and Image Processing logic from NewPuzzle, removed for brevity.
+
+![UML Diagram](https://github.com/carlpoole/CSE682-Sudoku-Android/blob/master/UML.png?raw=true)
