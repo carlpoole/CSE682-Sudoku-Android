@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import codes.carl.sudoku.Events.PuzzleFailEvent;
 import codes.carl.sudoku.Events.PuzzleHintEvent;
 import codes.carl.sudoku.Events.PuzzleUploadedEvent;
 import codes.carl.sudoku.Model.Puzzle;
@@ -150,6 +151,7 @@ public class Client {
                     try {
                         Puzzle puzzleError = gson.fromJson(response.errorBody().string(), Puzzle.class);
                         Log.e(TAG, puzzleError.error);
+                        EventBus.getDefault().post(new PuzzleUploadedEvent(puzzleError));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -166,7 +168,7 @@ public class Client {
             @Override
             public void onFailure(@NonNull Call<Puzzle> call, @NonNull Throwable throwable) {
                 Log.e(TAG, "Post fail");
-                // Todo: Error request handling
+                EventBus.getDefault().post(new PuzzleFailEvent());
             }
         });
 

@@ -11,9 +11,10 @@ import android.widget.GridView;
 import codes.carl.sudoku.R;
 
 /**
- * Created by carl on 12/11/2017.
+ * Represents a Sudoku puzzle.
+ *
+ * @author Carl Poole
  */
-
 public class SudokuGridView extends GridView {
     public SudokuGridView(Context context) {
         super(context);

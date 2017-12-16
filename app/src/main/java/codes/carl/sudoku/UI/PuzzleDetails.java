@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -80,13 +81,29 @@ public class PuzzleDetails extends BaseActivity {
                 Client.getInstance().getPuzzleHint(puzzle);
             }
         });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(puzzle.errorCoords != null){
+//            sudokuGrid.getChildAt((puzzle.errorCoords[0] * 9) + puzzle.errorCoords[1])
+//                    .setBackgroundResource(R.drawable.grid_error_rectangle);
+            hintButton.setEnabled(false);
+            solutionButton.setEnabled(false);
+            Toast toast = Toast.makeText(this, "Puzzle has an incorrect value. " +
+                            "Please check your answers and also check we read it correctly!",
+                    Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPuzzleHintUpdate(PuzzleHintEvent event) {
 
         // Clear selection on previous hint if applicable
-        if (puzzle.hintCoords != null)
+        if (puzzle.hintCoords != null || puzzle.errorCoords != null)
             sudokuGrid.getChildAt((puzzle.hintCoords[0] * 9) + puzzle.hintCoords[1]).setBackground(null);
 
 

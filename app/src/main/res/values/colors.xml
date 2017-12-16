@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#036e85</color>
     <color name="colorAccent">#e92894</color>
     <color name="colorAccent2">#f7e63b</color>
+    <color name="colorError">#b37f7f</color>
     <color name="control_background">#cc4285f4</color>
     <color name="camera_overlay">#040a28</color>
     <color name="camera_overlay_text_color">#000000</color>

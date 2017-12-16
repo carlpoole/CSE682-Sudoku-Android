@@ -1,7 +1,5 @@
 package codes.carl.sudoku.Events;
 
-import android.net.Uri;
-
 /**
  * Puzzle Captured Event Object Class
  * <p>

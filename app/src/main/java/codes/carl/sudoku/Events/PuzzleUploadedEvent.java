@@ -3,9 +3,14 @@ package codes.carl.sudoku.Events;
 import codes.carl.sudoku.Model.Puzzle;
 
 /**
- * Created by cma on 12/10/17.
+ * Puzzle Uploaded Event Object Class
+ * <p>
+ * Facilitates the puzzle-uploaded event with the Event Bus after the puzzle has
+ * been uploaded to the API and a puzzle has been received.
+ *
+ * @author Carl Poole
+ * @see org.greenrobot.eventbus.EventBus
  */
-
 public class PuzzleUploadedEvent {
 
     public Puzzle puzzle;

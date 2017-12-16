@@ -15,9 +15,8 @@ import codes.carl.sudoku.Model.Puzzle;
 import codes.carl.sudoku.SudokuApplication;
 
 /**
- * Created by carl on 12/11/2017.
+ * Manages SharedPreference Storage for Puzzles
  */
-
 public class StorageManager {
 
     /**

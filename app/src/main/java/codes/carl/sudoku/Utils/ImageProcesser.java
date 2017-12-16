@@ -1,20 +1,17 @@
 package codes.carl.sudoku.Utils;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-
 import com.zomato.photofilters.imageprocessors.Filter;
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubfilter;
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubfilter;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 
 /**
- *
+ * Image Processing Class
  */
 public class ImageProcesser {
 
