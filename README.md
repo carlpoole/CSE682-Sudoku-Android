@@ -7,7 +7,7 @@ This Android application allows a user to solve  Sudoku puzzle and check solutio
 
 [Link to SRS Document](https://docs.google.com/document/d/1i3jTwvAZrSgjs6TnRywGZNwpDQP4tRTtefdVMilIm94/edit?usp=sharing)
 
-[Link to deployed development instance](https://sudoku-dev.herokuapp.com
+[Link to deployed development instance](https://sudoku-dev.herokuapp.com)
 
 ## Deployment
 
